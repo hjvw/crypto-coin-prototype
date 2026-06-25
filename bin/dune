@@ -1,0 +1,4 @@
+(executable
+ (public_name kukrycoin)
+ (name main)
+ (libraries kukrycoin))
