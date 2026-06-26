@@ -27,4 +27,29 @@ let () =
   print_endline "Deciphring with private key";
   let decipher = Kukrycoin.Rsa.decrypt keys.priv cipher in 
   Printf.printf "Deciphring result: \"%s\"\n" (Bytes.to_string decipher);
+  
 
+  let ledger0 = 
+    Kukrycoin.Ledger.empty 
+    |> Kukrycoin.Ledger.LedgerMap.add "Jan" 100.0 
+    |> Kukrycoin.Ledger.LedgerMap.add "Bob" 50.0 
+  in 
+
+  print_endline ("Jan start: " ^ string_of_float (Kukrycoin.Ledger.get_balance "Jan" ledger0));
+  print_endline ("Bob start: " ^ string_of_float (Kukrycoin.Ledger.get_balance "Bob" ledger0));
+
+
+  let txs = [
+    {Kukrycoin.Transaction.sender = "Jan"; receiver = "Bob"; amount = 30.0; nonce = 1; signature = "sig1" };
+    {Kukrycoin.Transaction.sender = "Bob"; receiver = "Jan"; amount = 10.0; nonce = 1; signature = "sig2"}
+  ] in 
+
+  let ledger1 = Kukrycoin.Ledger.apply_block_transactions ledger0 txs in 
+
+  print_endline ("Jan: " ^ string_of_float (Kukrycoin.Ledger.get_balance "Jan" ledger1));
+  print_endline ("Bob: " ^ string_of_float (Kukrycoin.Ledger.get_balance "Bob" ledger1));
+
+  let data = "block1_data" in 
+  let diff = "00" in 
+  let nonce = Kukrycoin.Consensus.mine_block data diff in 
+  Printf.printf "Nonce found: %d for hash that starts with %s\n" nonce diff
