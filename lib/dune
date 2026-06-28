@@ -1,5 +1,5 @@
 (library
  (name kukrycoin)
  (public_name kukrycoin)
- (libraries zarith))
+ (libraries zarith cohttp-lwt-unix yojson lwt.unix))
  

@@ -2,3 +2,8 @@
  (public_name kukrycoin)
  (name main)
  (libraries kukrycoin))
+
+(executable
+ (name wallet)
+ (public_name wallet)
+ (libraries zarith kukrycoin))

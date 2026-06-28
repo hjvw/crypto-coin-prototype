@@ -1,4 +1,4 @@
-let test_hash msg expected = 
+(* let test_hash msg expected = 
   let result = Kukrycoin.Sha256.string msg in 
   Printf.printf "tekst: \"%s\"\n" msg;
   Printf.printf "wynik: %s\n" result;
@@ -52,4 +52,21 @@ let () =
   let data = "block1_data" in 
   let diff = "00" in 
   let nonce = Kukrycoin.Consensus.mine_block data diff in 
-  Printf.printf "Nonce found: %d for hash that starts with %s\n" nonce diff
+  Printf.printf "Nonce found: %d for hash that starts with %s\n" nonce diff *)
+
+open Lwt.Infix 
+
+let () = 
+  let port = if Array.length Sys.argv > 1 then int_of_string Sys.argv.(1) else 8080 in 
+
+  if port = 8080 then 
+    Kukrycoin.Blockchain.set_peers ["http://localhost:8081"] 
+  else 
+    Kukrycoin.Blockchain.set_peers ["http://localhost:8080"];
+
+  Printf.printf "Initializing node on port %d \n%!" port;
+
+  Lwt_main.run (Kukrycoin.Blockchain.start_node port)
+
+
+
